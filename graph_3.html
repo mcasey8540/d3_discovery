@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+    </head>
+    <body>
+    	<style type="text/css">
+			  .bar {
+			    display: inline-block;
+			    width: 20px;
+			    height: 75px;   /* We'll override this later */
+			    background-color: teal;
+				}
+    	</style>
+        <script type="text/javascript">
+        		var dataset = [ 25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
+                14, 11, 22, 29, 11, 13, 12, 17, 18, 10,
+                24, 18, 25, 9, 3 ];
+
+            d3.select("body").selectAll("p")
+            	.data(dataset)
+            	.enter()
+            	.append("p")
+            	.attr("class", "bar")
+            	.style("height", function(d){
+            		var barHeight = d * 5;
+            		return barHeight + "px";
+            	})
+            	.style("width", "7px")          	
+            	.style("margin-right", "2px");
+        </script>
+    </body>
+</html

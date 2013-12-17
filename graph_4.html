@@ -1,7 +1,8 @@
-#index.html
-Using d3-tip to add tooltips to a d3 bar chart.
 <!DOCTYPE html>
 <meta charset="utf-8">
+<html>
+  <h1>Your Trends</h1>
+</html>
 <style>
 
 body {
@@ -16,7 +17,7 @@ body {
 }
 
 .bar {
-  fill: teal;
+  fill: #11a7ad;
 }
 
 .bar:hover {
@@ -33,9 +34,11 @@ body {
   padding: 12px;
   background: white;
   color: #fff;
+  height: 50px;
+  width: 200px;
   border-style: solid;
   border-width:/5px;
-  border-radius:7px;
+  border-radius:5px;
   box-shadow: 0px 0px 9px #888888;
 }
 
@@ -43,10 +46,10 @@ body {
 .d3-tip:after {
   box-sizing: border-box;
   display: inline;
-  font-size: 10px;
+  font-size: 15px;
   width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
+  line-height: 3;
+  color: #fff;
   content: "\25BC";
   position: absolute;
   text-align: center;
@@ -64,14 +67,14 @@ body {
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 <script>
 
-var margin = {top: 40, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var margin = {top: 100, right: 20, bottom: 30, left: 40},
+    width = 750 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
 
-var formatPercent = d3.format(".0%");
+var numberFormat = d3.format(".04d");
 
 var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1);
+    .rangeRoundBands([0, width], .25);
 
 var y = d3.scale.linear()
     .range([height, 0]);
@@ -83,7 +86,9 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
-    .tickFormat(formatPercent);
+    .tickSize(0)
+    .tickPadding([15])
+    .tickFormat(function(d) { return numberFormat(d) + " Cals";});
 
 var tip = d3.tip()
   .attr('class', 'd3-tip')
@@ -102,7 +107,7 @@ svg.call(tip);
 
 d3.tsv("data.tsv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.letter; }));
-  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+  y.domain([0, d3.max(data, function(d) { return d.frequency + 1000; })]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -110,14 +115,8 @@ d3.tsv("data.tsv", type, function(error, data) {
       .call(xAxis);
 
   svg.append("g")
-      .attr("class", "y axis")
       .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Frequency");
+      .attr("transform", "translate(30)")
 
   svg.selectAll(".bar")
       .data(data)
@@ -136,5 +135,4 @@ function type(d) {
   d.frequency = +d.frequency;
   return d;
 }
-
 </script>

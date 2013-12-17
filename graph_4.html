@@ -69,7 +69,7 @@ body {
 
 var margin = {top: 100, right: 20, bottom: 30, left: 40},
     width = 750 - margin.left - margin.right,
-    height = 350 - margin.top - margin.bottom;
+    height = 500 - margin.top - margin.bottom;
 
 var numberFormat = d3.format(".04d");
 
@@ -81,7 +81,8 @@ var y = d3.scale.linear()
 
 var xAxis = d3.svg.axis()
     .scale(x)
-    .orient("bottom");
+    .orient("bottom")
+    .tickSize(0);
 
 var yAxis = d3.svg.axis()
     .scale(y)
@@ -101,13 +102,13 @@ var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+   
 svg.call(tip);
 
 d3.tsv("data.tsv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.letter; }));
-  y.domain([d3.min(data, function(d) { return d.frequency - 500; }), d3.max(data, function(d) { return d.frequency + 500; })]);
+  y.domain([d3.min(data, function(d) { return d.frequency - 400; }), d3.max(data, function(d) { return d.frequency + 1000; })]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -127,8 +128,16 @@ d3.tsv("data.tsv", type, function(error, data) {
       .attr("y", function(d, i) { return y(Math.max(0, d.frequency));})
       .attr("height", function(d) { return Math.abs(y(d.frequency) - y(0)); })
       .on('mouseover', tip.show)
-      .on('mouseout', tip.hide)
+      .on('mouseout', tip.hide);
 
+  var line = svg.append("line")
+      .attr("x1",margin.left - 10)
+      .attr("y1",100)
+      .attr("x2",width - margin.right)
+      .attr("y2",100)
+      .attr("stroke-width", 2)
+      .attr("stroke", "grey");
+   
 });
 
 function type(d) {

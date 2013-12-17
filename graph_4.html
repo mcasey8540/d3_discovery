@@ -73,6 +73,9 @@ var margin = {top: 100, right: 20, bottom: 30, left: 40},
 
 var numberFormat = d3.format(".04d");
 
+//replace
+var dailyCalorieTarget = 2000;
+
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .25);
 
@@ -85,12 +88,12 @@ var xAxis = d3.svg.axis()
     .tickSize(0);
 
 var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-    .tickSize(0)
-    .tickPadding([15])
-    .tickFormat(function(d) { return numberFormat(d) + " Cals";});
-
+  .scale(y)
+  .orient("left")
+  .tickSize(0)
+  .tickPadding([15])
+  .tickFormat(function(d) { return numberFormat(d) + " Cals";})
+  
 var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
@@ -130,15 +133,25 @@ d3.tsv("data.tsv", type, function(error, data) {
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
-  var line = svg.append("line")
-      .attr("x1",margin.left - 10)
-      .attr("y1",100)
-      .attr("x2",width - margin.right)
-      .attr("y2",100)
-      .attr("stroke-width", 2)
-      .attr("stroke", "#808285")
-      .attr('stroke-dasharray', ('6, 3'));
-   
+  //daily calorie trend line
+  svg.append("line")
+    .attr("x1",margin.left - 10)
+    .attr("y1",y(dailyCalorieTarget))
+    .attr("x2",width - margin.right)
+    .attr("y2",y(dailyCalorieTarget))
+    .attr("stroke-width", 2)
+    .attr("stroke", "#808285")
+    .attr('stroke-dasharray', ('6, 3'));
+
+  svg.append("rect")
+    .attr("x", margin.right)
+    .attr("y", 15)
+    .attr("height", height)
+    .attr("width", width - margin.right)   
+    .style("stroke", "grey")
+    .style("fill", "none")
+    .style("stroke-width", .1);
+
 });
 
 function type(d) {

@@ -107,16 +107,16 @@ svg.call(tip);
 
 d3.tsv("data.tsv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.letter; }));
-  y.domain([0, d3.max(data, function(d) { return d.frequency + 1000; })]);
+  y.domain([d3.min(data, function(d) { return d.frequency - 500; }), d3.max(data, function(d) { return d.frequency + 500; })]);
 
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
-
   svg.append("g")
+      .attr("class", "x axis")
       .call(yAxis)
-      .attr("transform", "translate(30)")
+      .attr("transform", "translate(30)");
 
   svg.selectAll(".bar")
       .data(data)
@@ -124,8 +124,8 @@ d3.tsv("data.tsv", type, function(error, data) {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.letter); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.frequency); })
-      .attr("height", function(d) { return height - y(d.frequency); })
+      .attr("y", function(d, i) { return y(Math.max(0, d.frequency));})
+      .attr("height", function(d) { return Math.abs(y(d.frequency) - y(0)); })
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)
 

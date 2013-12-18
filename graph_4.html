@@ -67,14 +67,24 @@ body {
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 <script>
 
-var margin = {top: 100, right: 20, bottom: 30, left: 40},
-    width = 750 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+//placeholder
+var data = [
+  {"letter":"Monday", "frequency": 2075},
+  {"letter":"Tuesday", "frequency": 2200},
+  {"letter":"Wednesday", "frequency": 1900},
+  {"letter":"Thursday", "frequency": 1650},
+  {"letter":"Friday", "frequency": 1800},
+  {"letter":"Saturday", "frequency": -100}
+]
+
+//placeholder
+var dailyCalorieTarget = 2000;
+
+var margin = {top: 20, right: 20, bottom: 20, left: 40},
+    width = 550 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
 
 var numberFormat = d3.format(".04d");
-
-//replace
-var dailyCalorieTarget = 2000;
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .25);
@@ -91,7 +101,7 @@ var yAxis = d3.svg.axis()
   .scale(y)
   .orient("left")
   .tickSize(0)
-  .tickPadding([15])
+  .tickPadding([20])
   .tickFormat(function(d) { return numberFormat(d) + " Cals";})
   
 var tip = d3.tip()
@@ -109,7 +119,6 @@ var svg = d3.select("body").append("svg")
    
 svg.call(tip);
 
-d3.tsv("data.tsv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.letter; }));
   y.domain([d3.min(data, function(d) { return d.frequency - 400; }), d3.max(data, function(d) { return d.frequency + 1000; })]);
 
@@ -120,7 +129,7 @@ d3.tsv("data.tsv", type, function(error, data) {
   svg.append("g")
       .attr("class", "x axis")
       .call(yAxis)
-      .attr("transform", "translate(30)");
+      .attr("transform", "translate(35)");
 
   svg.selectAll(".bar")
       .data(data)
@@ -151,8 +160,6 @@ d3.tsv("data.tsv", type, function(error, data) {
     .style("stroke", "grey")
     .style("fill", "none")
     .style("stroke-width", .1);
-
-});
 
 function type(d) {
   d.frequency = +d.frequency;

@@ -2,14 +2,27 @@
 <meta charset="utf-8">
 <style>
 
-.chart rect {
+.bar{
   fill: steelblue;
 }
 
-.chart text {
-  fill: white;
+.bar:hover{
+  fill: brown;
+}
+
+.axis{
   font: 10px sans-serif;
-  text-anchor: end;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path{
+  display:none;
 }
 
 </style>
@@ -28,37 +41,57 @@ var data = [
   {name: "Kwon",     value: 42}
 ];
 
-  //display width  
-  var width = 300,
-      height = 200,
-      barWidth = width / data.length;
+  //outer margins
+  var margin = {top: 20, right:30, bottom:30, left:40 },
+    //chart bars
+    height = 300 - margin.top - margin.bottom,
+    width = 500 - margin.right - margin.left;
 
   //function - location PLACEMENT matters
+  var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .2)
+    .domain(data.map(function(d){return d.name; }));
+
   var y = d3.scale.linear()
     //display
     .range([height, 0])
+    //data
     .domain([0, data[5].value]);
+  
+  //adding axes
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(d3.format(",.0f"));
 
   var chart = d3.select(".chart")
-    .attr("width", width)
-    .attr("height", height);
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    //adds margins for axes
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var bar = chart.selectAll("g")
+  chart.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0,"+height+")")
+    .call(xAxis);
+
+  chart.append("g")
+    .attr("class","y axis")
+    .call(yAxis)      
+
+  chart.selectAll(".bar")
       .data(data)
-    .enter().append("g")
-      .attr("transform", function(d, i) {return "translate(" + i * barWidth + ",0)";});
-
-    bar.append("rect")
-      //x is a function and automatically pro
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) {return x(d.name); })
       .attr("y", function(d) {return y(d.value); })
       .attr("height", function(d){return height - y(d.value)})
-      .attr("width", barWidth - 1);
-
-    bar.append("text")
-      .attr("x", barWidth / 2)
-      .attr("y", function(d) {return y(d.value) + 3;})
-      .attr("dy", ".75em")
-      .text(function(d) {return d.name; });
+      .attr("width", x.rangeBand());
 
 </script>
 

@@ -33,9 +33,9 @@
 <script>
 
 var data = [
-  {name: "Monday",    value:  1950},
+  {name: "Monday",    value:  1300},
   {name: "Tuesday",    value:  1700},
-  {name: "Wednesday",     value: 1900},
+  {name: "Wednesday",     value: 2000},
   {name: "Thursday",   value: 1400},
   {name: "Friday", value: -200},
   {name: "Saturday",     value: 1560}
@@ -79,7 +79,7 @@ var data = [
       .attr("height", height + margin.top + margin.bottom)
     //adds margins for axes
     .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
   chart.append("g")
     .attr("class", "x axis")
@@ -108,6 +108,18 @@ var data = [
     .attr("stroke-width", 2)
     .attr("stroke", "#808285")
     .attr('stroke-dasharray', ('6, 3'));
+
+  //chart border
+  chart.append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("height", height)
+    .attr("width", width)   
+    .style("stroke", "#323232")
+    .style("fill", "none")
+    .style("stroke-width", .1);
+
+  
 
 </script>
 

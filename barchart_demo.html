@@ -25,6 +25,14 @@
   display:none;
 }
 
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+      stroke-width: 0;
+}
+
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <html>
@@ -88,7 +96,14 @@ var data = [
 
   chart.append("g")
     .attr("class","y axis")
-    .call(yAxis)      
+    .call(yAxis)
+
+  chart.append("g")         
+    .attr("class", "grid")
+    .call(make_y_axis()
+      .tickSize(-width, 0, 0)
+      .tickFormat("")
+  )         
 
   chart.selectAll(".bar")
       .data(data)
@@ -119,7 +134,13 @@ var data = [
     .style("fill", "none")
     .style("stroke-width", .1);
 
-  
+  function make_y_axis() {        
+    return d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .ticks(5)
+  }
+
 
 </script>
 

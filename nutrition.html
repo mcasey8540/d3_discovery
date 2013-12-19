@@ -30,6 +30,12 @@
   font: 10px sans-serif;
 }
 
+.chart-title{
+  font: 15px sans-serif;
+  fill: black;
+  font-weight:bold;
+}
+
 .average{
   font: 10px sans-serif;
   fill: black;
@@ -141,23 +147,12 @@ var fat_above = 40;
 
   var numberFormat = d3.format(".02d");
 
-  //function - location PLACEMENT matters
-  var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .2)
-    .domain([0,4]);
-
   var y = d3.scale.linear()
     //display
     .range([height, 0])
     //data
     .domain([0, d3.max(fat_data, function(d) { return d.value})]);
   
-  //adding axes
-  var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-    .tickSize(0);
-
   var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
@@ -174,11 +169,6 @@ var fat_above = 40;
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
   chart.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0,"+height+")")
-    //.call(xAxis);
-
-  chart.append("g")
     .attr("class","y axis")
     .call(yAxis)
 
@@ -189,7 +179,7 @@ var fat_above = 40;
       .attr("x",0)
       .attr("y", function(d) { return y(d.value);})
       .attr("height", function(d){ return height - y(d.value); })
-      .attr("width", x.rangeBand())
+      .attr("width", 35)
 
   function determineRange(value){
     var c; 
@@ -202,7 +192,7 @@ var fat_above = 40;
     return c;
   }
     
-  //daily calorie trend line
+  //average intake line
   chart.append("line")
     .attr("x1",0)
     .attr("y1",y(fat_avg))
@@ -212,12 +202,19 @@ var fat_above = 40;
     .attr("stroke", "#000000")
     //.attr('stroke-dasharray', ('6, 3'))
 
-  //chart border
+  //aveerage intake text
   chart.append("text")
     .attr("x", width - 57)
     .attr("y", y(fat_avg) - 6)
     .attr("class", "average")
     .text(function(d){return fat_avg + "g"});
+
+  //chart title
+  chart.append("text")
+    .attr("x", 0)
+    .attr("y", -15)
+    .attr("class", "chart-title")
+    .text(function(d){return "Fat"});
 
 
   function make_y_axis() {        

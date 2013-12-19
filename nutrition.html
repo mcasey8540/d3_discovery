@@ -135,19 +135,85 @@ body {
 </html>
 <script>
 
-//seed data
-var avg = 25,
-    below = 35,
-    above = 65,
-    chart_title = "Fat"
-    chart_type = "protein-chart";
+function getChartData(){
 
-var data = [
-  {value:  above},
-  {value:  below}
-];
+  function getFatData(){
+    var avg = 25,
+      below = 35,
+      above = 65,
+      chart_title = "Fat"
+      chart_type = "fat-chart";
 
-generateChart(avg,below,above,chart_title,chart_type,data);
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  }
+
+  function getFiberData(){
+    var avg = 15,
+      below = 10,
+      above = 20,
+      chart_title = "Fiber"
+      chart_type = "fiber-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  } 
+
+  function getCarbsData(){
+    var avg = 155,
+      below = 80,
+      above = 125,
+      chart_title = "Carbs"
+      chart_type = "carbs-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  } 
+
+  function getSodiumData(){
+    var avg = 820,
+      below = 800,
+      above = 900,
+      chart_title = "Sodium"
+      chart_type = "sodium-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  }  
+
+  function getProteinData(){
+    var avg = 25,
+      below = 35,
+      above = 65,
+      chart_title = "Protein"
+      chart_type = "protein-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  }       
+
+  getFatData();
+  getFiberData();
+  getCarbsData();
+  getSodiumData();
+  getProteinData();
+
+}
 
 function generateChart(avg,below,above,chart_title,chart_type,data){ 
   //calculate largest datapoint
@@ -183,7 +249,7 @@ function generateChart(avg,below,above,chart_title,chart_type,data){
         .attr("height", height + margin.top + margin.bottom)
       //adds margins for axes
       .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("transform", "translate(40," + margin.top + ")")
 
     chart.append("g")
       .attr("class","y axis")
@@ -220,7 +286,7 @@ function generateChart(avg,below,above,chart_title,chart_type,data){
 
     //aveerage intake text
     chart.append("text")
-      .attr("x", width - 16)
+      .attr("x", width - 17)
       .attr("y", y(avg) - 6)
       .attr("class", "average")
       .text(function(d){return avg + "g"});
@@ -239,6 +305,8 @@ function generateChart(avg,below,above,chart_title,chart_type,data){
         .ticks(5)
     }
   }
+
+  getChartData();
 
 </script>
 

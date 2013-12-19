@@ -217,7 +217,8 @@ function getChartData(){
 
 function generateChart(avg,below,above,chart_title,chart_type,data){ 
   //calculate largest datapoint
-  var max_data = d3.max(data, function(d) { return d.value}) + (d3.max(data, function(d) { return d.value}) - d3.min(data, function(d) { return d.value}));
+  var max_data = d3.max(data, function(d) { return d.value}) + 
+      ((d3.max(data, function(d) { return d.value}) - d3.min(data, function(d) { return d.value}) + d3.min(data, function(d) { return d.value}))/2);
 
   //add largest datapoint
   data.unshift({value: max_data});

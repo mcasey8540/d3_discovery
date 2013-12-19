@@ -252,18 +252,32 @@ function generateChart(avg,below,above,chart_title,chart_type,data){
       .append("g")
         .attr("transform", "translate(40," + margin.top + ")")
 
-    chart.append("g")
+    var yaxisTicks = chart.append("g")
       .attr("class","y axis")
+      
+    yaxisTicks.transition()
+      .duration(750)
+      .delay(250)
       .call(yAxis)
 
-    chart.selectAll(".bar")
+    var bars = chart.selectAll(".bar")
         .data(data)
       .enter().append("rect")
         .attr("class", function(d) { return determineRange(d.value); })
         .attr("x",0)
-        .attr("y", function(d) { return y(d.value);})
-        .attr("height", function(d){ return height - y(d.value); })
+        .attr("y", function(d) { return y(0);})
+        .attr("height", function(d){ return height - y(0); })
         .attr("width", 35)
+
+    bars.transition()
+      .ease("elastic")
+      .duration(1500)
+      .delay(250)
+      .attr("class", function(d) { return determineRange(d.value); })
+      .attr("x",0)
+      .attr("y", function(d) { return y(d.value);})
+      .attr("height", function(d){ return height - y(d.value); })
+      .attr("width", 35)
 
     function determineRange(value){
       var c; 

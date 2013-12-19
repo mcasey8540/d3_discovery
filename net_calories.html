@@ -209,7 +209,7 @@ var data = [
   bars.transition()
     .ease("elastic")
     .duration(1500)
-    .delay(750)
+    .delay(250)
     .attr("class", function(d) { var c; d.name === "Today 1/28" ? c="today-bar" : c="bar"; return c; })
     .attr("x", function(d) {return x(d.name); })
     .attr("y", function(d) { return y(Math.max(0, d.value));})

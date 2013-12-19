@@ -3,11 +3,11 @@
 <style>
 
 .bar{
-  fill: steelblue;
+  fill: #11a7ad;
 }
 
 .bar:hover{
-  fill: brown;
+  fill: #085456;
 }
 
 .axis{
@@ -31,17 +31,66 @@
 }
 
 .grid .tick {
-    stroke: lightgrey;
-    opacity: 0.7;
+  stroke: lightgrey;
+  opacity: 0.7;
 }
 .grid path {
-      stroke-width: 0;
+  stroke-width: 0;
+}
+
+/*tooltips*/
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: white;
+  color: #fff;
+  height: 50px;
+  width: 100px;
+  border-style: solid;
+  border-width:/5px;
+  border-radius:5px;
+  box-shadow: 0px 0px 9px #888888;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 15px;
+  width: 100%;
+  line-height: 1;
+  color: #fff;
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+/* popover content */
+.d3-tip-container{
+  font: 10px sans-serif;
+  color: grey;
+  text-align: center;
+}
+
+.d3-tip-content{
+  text-align: left;
+  margin-left: 5px;
+}
+
+.d3-tip-netcal{
+  color: #11a7ad;
 }
 
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="d3-bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="bootstrap.css">
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 <html>
   <svg class="chart"></svg>
 </html>
@@ -57,7 +106,7 @@ var data = [
 ];
 
   //outer margins
-  var margin = {top: 20, right:30, bottom:30, left:60 },
+  var margin = {top: 40, right:30, bottom:30, left:60 },
     //chart bars
     height = 300 - margin.top - margin.bottom,
     width = 500 - margin.right - margin.left;
@@ -90,12 +139,27 @@ var data = [
     .tickSize(0)
     .tickFormat(function(d) { return numberFormat(d) + " Cals";});
 
+  //adding tooltip
+  var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+      return  "<div class='d3-tip-container'>" + d.name + "<hr>"+
+                "<div class='d3-tip-content'>" + 
+                  "<span class='d3-tip-netcal'>" + d.value + " Net Calories</span></br>"+
+                  + d.value + " Food Logged</br>" +
+                  + d.value + " Activity Earned</div>"+
+              "</div>"
+    })  
+
   var chart = d3.select(".chart")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     //adds margins for axes
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  chart.call(tip);
 
   chart.append("g")
     .attr("class", "x axis")
@@ -111,7 +175,7 @@ var data = [
     .call(make_y_axis()
       .tickSize(-width, 0, 0)
       .tickFormat("")
-  )         
+  ) 
 
   chart.selectAll(".bar")
       .data(data)
@@ -120,7 +184,9 @@ var data = [
       .attr("x", function(d) {return x(d.name); })
       .attr("y", function(d) { return y(Math.max(0, d.value));})
       .attr("height", function(d){ return Math.abs(y(d.value) - y(0)); })
-      .attr("width", x.rangeBand());
+      .attr("width", x.rangeBand())
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);      
 
   //daily calorie trend line
   chart.append("line")
@@ -130,7 +196,7 @@ var data = [
     .attr("y2",y(dailyCalorieTarget))
     .attr("stroke-width", 2)
     .attr("stroke", "#808285")
-    .attr('stroke-dasharray', ('6, 3'));
+    .attr('stroke-dasharray', ('6, 3'))
 
   //chart border
   chart.append("rect")
@@ -148,7 +214,6 @@ var data = [
       .orient("left")
       .ticks(5)
   }
-
 
 </script>
 

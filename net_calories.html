@@ -35,7 +35,7 @@ body {
   background: white;
   color: #fff;
   height: 50px;
-  width: 200px;
+  width: 100px;
   border-style: solid;
   border-width:/5px;
   border-radius:5px;
@@ -48,7 +48,7 @@ body {
   display: inline;
   font-size: 15px;
   width: 100%;
-  line-height: 3;
+  line-height: 1;
   color: #fff;
   content: "\25BC";
   position: absolute;
@@ -61,6 +61,17 @@ body {
   top: 100%;
   left: 0;
 }
+/* popover content */
+.d3-tip-container{
+  font: 10px sans-serif;
+  color: grey;
+  text-align: center;
+}
+
+.d3-tip-netcal{
+  color: #11a7ad;
+}
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -108,7 +119,12 @@ var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+    return  "<div class='d3-tip-container'>"+
+              "<span class='d3-tip-content'>" + d.letter + "</br>" + 
+                "<span class='d3-tip-netcal'>" + d.frequency + " Net Calories</span></br>"+
+                + d.frequency + " Food Logged</br>" +
+                + d.frequency + " Activity Earned</span>"+
+            "</div>"
   })
 
 var svg = d3.select("body").append("svg")

@@ -136,23 +136,25 @@ body {
 <script>
 
 //seed data
-var fat_avg = 25,
-    fat_below = 35,
-    fat_above = 65,
+var avg = 25,
+    below = 35,
+    above = 65,
     chart_title = "Fat"
     chart_type = "protein-chart";
 
-var fat_data = [
-  {value:  fat_above},
-  {value:  fat_below}
+var data = [
+  {value:  above},
+  {value:  below}
 ];
 
-function generateChart(fat_avg,fat_below,fat_above,chart_title,chart_type,fat_data){ 
+generateChart(avg,below,above,chart_title,chart_type,data);
+
+function generateChart(avg,below,above,chart_title,chart_type,data){ 
   //calculate largest datapoint
-  var max_data = d3.max(fat_data, function(d) { return d.value}) + (d3.max(fat_data, function(d) { return d.value}) - d3.min(fat_data, function(d) { return d.value}));
+  var max_data = d3.max(data, function(d) { return d.value}) + (d3.max(data, function(d) { return d.value}) - d3.min(data, function(d) { return d.value}));
 
   //add largest datapoint
-  fat_data.unshift({value: max_data});
+  data.unshift({value: max_data});
 
     //outer margins
     var margin = {top: 50, right:15, bottom:30, left:60 },
@@ -166,14 +168,14 @@ function generateChart(fat_avg,fat_below,fat_above,chart_title,chart_type,fat_da
       //display
       .range([height, 0])
       //data
-      .domain([0, d3.max(fat_data, function(d) { return d.value})]);
+      .domain([0, d3.max(data, function(d) { return d.value})]);
     
     var yAxis = d3.svg.axis()
       .scale(y)
       .orient("left")
       .tickPadding(10)
       .tickSize(0)
-      .tickValues([fat_data[1]["value"], fat_data[2]["value"]])
+      .tickValues([data[1]["value"], data[2]["value"]])
       .tickFormat(function(d) { return numberFormat(d) + " g";});
 
     var chart = d3.selectAll("."+chart_type)
@@ -188,7 +190,7 @@ function generateChart(fat_avg,fat_below,fat_above,chart_title,chart_type,fat_da
       .call(yAxis)
 
     chart.selectAll(".bar")
-        .data(fat_data)
+        .data(data)
       .enter().append("rect")
         .attr("class", function(d) { return determineRange(d.value); })
         .attr("x",0)
@@ -198,9 +200,9 @@ function generateChart(fat_avg,fat_below,fat_above,chart_title,chart_type,fat_da
 
     function determineRange(value){
       var c; 
-      if(value === fat_below){
+      if(value === below){
         c="below-recommended"} 
-      else if(value === fat_above ){
+      else if(value === above ){
         c="recommended"}
       else{
         c="above-recommended"}
@@ -210,18 +212,18 @@ function generateChart(fat_avg,fat_below,fat_above,chart_title,chart_type,fat_da
     //average intake line
     chart.append("line")
       .attr("x1",0)
-      .attr("y1",y(fat_avg))
+      .attr("y1",y(avg))
       .attr("x2",width)
-      .attr("y2",y(fat_avg))
+      .attr("y2",y(avg))
       .attr("stroke-width", 2)
       .attr("stroke", "#000000")
 
     //aveerage intake text
     chart.append("text")
       .attr("x", width - 16)
-      .attr("y", y(fat_avg) - 6)
+      .attr("y", y(avg) - 6)
       .attr("class", "average")
-      .text(function(d){return fat_avg + "g"});
+      .text(function(d){return avg + "g"});
 
     //chart title
     chart.append("text")
@@ -237,8 +239,6 @@ function generateChart(fat_avg,fat_below,fat_above,chart_title,chart_type,fat_da
         .ticks(5)
     }
   }
-
-  generateChart(fat_avg,fat_below,fat_above,chart_title,chart_type,fat_data);
 
 </script>
 

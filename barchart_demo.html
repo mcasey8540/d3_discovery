@@ -10,12 +10,21 @@
   fill: #11a7ad;
 }
 
+.today-bar{
+  fill: #73ab5b;
+}
+
 .bar:hover{
   fill: #085456;
 }
 
 .axis{
   font: 10px sans-serif;
+}
+
+.axis-today{
+  font: 10px sans-serif;
+  fill: #73ab5b;
 }
 
 .axis path,
@@ -106,7 +115,8 @@ var data = [
   {name: "Wed 1/25",  value: 2000},
   {name: "Thurs 1/26", value: 1400},
   {name: "Fri 1/27", value: -200},
-  {name: "Today 1/28 ", value: 1560}
+  {name: "Today 1/28", value: 1560},
+  {name: "Sun 1/28", value: 0}
 ];
 
   //outer margins
@@ -184,7 +194,7 @@ var data = [
   chart.selectAll(".bar")
       .data(data)
     .enter().append("rect")
-      .attr("class", "bar")
+      .attr("class", function(d) { var c; d.name === "Today 1/28" ? c="today-bar" : c="bar"; return c; })
       .attr("x", function(d) {return x(d.name); })
       .attr("y", function(d) { return y(Math.max(0, d.value));})
       .attr("height", function(d){ return Math.abs(y(d.value) - y(0)); })

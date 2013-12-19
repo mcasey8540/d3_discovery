@@ -198,7 +198,7 @@ var data = [
   var bars = chart.selectAll(".bar")
       .data(data)
     .enter().append("rect")
-      .attr("class", function(d) { var c; d.name === "Today 1/28" ? c="today-bar" : c="bar"; return c; })
+      .attr("class","bar")
       .attr("x", function(d) {return x(0); })
       .attr("y", function(d) { return y(Math.max(0, 0));})
       .attr("height", function(d){ return Math.abs(y(0) - y(0)); })
@@ -209,12 +209,15 @@ var data = [
   bars.transition()
     .ease("elastic")
     .duration(1500)
-    .delay(250)
-    .attr("class", function(d) { var c; d.name === "Today 1/28" ? c="today-bar" : c="bar"; return c; })
     .attr("x", function(d) {return x(d.name); })
     .attr("y", function(d) { return y(Math.max(0, d.value));})
     .attr("height", function(d){ return Math.abs(y(d.value) - y(0)); })
-    .attr("width", x.rangeBand())    
+    .attr("width", x.rangeBand())
+    .each("end", function() {  
+      d3.select(this).transition()
+      .duration(750)
+      .attr("class", function(d) { var c; d.name === "Today 1/28" ? c="today-bar" : c="bar"; return c; })   
+    });    
 
   //daily calorie trend line
   var calorieLine = chart.append("line")

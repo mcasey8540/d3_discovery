@@ -217,20 +217,38 @@ var data = [
     .attr("width", x.rangeBand())    
 
   //daily calorie trend line
-  chart.append("line")
+  var calorieLine = chart.append("line")
+    .attr("x1",0)
+    .attr("y1",y(0))
+    .attr("x2",width - 10)
+    .attr("y2",y(0))
+    .attr("stroke-width", 2)
+    .attr("stroke", "#808285")
+    .attr('stroke-dasharray', ('6, 3'));
+
+  calorieLine.transition()
+    .ease("elastic")
+    .duration(1500)
+    .delay(250)
     .attr("x1",0)
     .attr("y1",y(dailyCalorieTarget))
     .attr("x2",width - 10)
     .attr("y2",y(dailyCalorieTarget))
     .attr("stroke-width", 2)
     .attr("stroke", "#808285")
-    .attr('stroke-dasharray', ('6, 3'));
-  chart.append("text")
+    .attr('stroke-dasharray', ('6, 3'));    
+
+  var calorieText = chart.append("text")
     .attr("x", width - 10)
     .attr("y", y(dailyCalorieTarget) + 2)
     .attr("class", "axis")
-    .text(function(d){return "Daily Calorie Goal";});  
+    .style("fill-opacity", "0")
+    .text(function(d){return "Daily Calorie Goal";});
 
+  calorieText.transition()
+    .duration(1500)
+    .delay(200)
+    .style("fill-opacity", "1")
 
   //chart border
   chart.append("rect")

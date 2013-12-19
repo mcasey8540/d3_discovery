@@ -186,16 +186,6 @@ var fat_above = 40;
       .attr("height", function(d){ return height - y(d.value); })
       .attr("width", x.rangeBand())
 
-    chart.selectAll(".bar")
-      .data(fat_data)
-    .enter().append("rect")
-      .attr("class", function(d) { return determineRange(d.value); })
-      .attr("x", 80)
-      .attr("y", function(d) { return y(d.value);})
-      .attr("height", function(d){ return height - y(d.value); })
-      .attr("width", x.rangeBand())
-
-
   function determineRange(value){
     var c; 
     if(value === fat_below){
@@ -208,14 +198,14 @@ var fat_above = 40;
   }
     
   //daily calorie trend line
-  // chart.append("line")
-  //   .attr("x1",0)
-  //   .attr("y1",y(dailyCalorieTarget))
-  //   .attr("x2",width - 10)
-  //   .attr("y2",y(dailyCalorieTarget))
-  //   .attr("stroke-width", 2)
-  //   .attr("stroke", "#808285")
-  //   .attr('stroke-dasharray', ('6, 3'))
+  chart.append("line")
+    .attr("x1",0)
+    .attr("y1",y(fat_avg))
+    .attr("x2",width - 40)
+    .attr("y2",y(fat_avg))
+    .attr("stroke-width", 2)
+    .attr("stroke", "#000000")
+    //.attr('stroke-dasharray', ('6, 3'))
 
   //chart border
   // chart.append("rect")

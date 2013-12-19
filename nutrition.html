@@ -135,15 +135,16 @@ var fat_data = [
   {value:  25}
 ];
 
-var fat_avg = 40;
-var fat_below = 25;
-var fat_above = 40;
+var fat_avg = 40,
+    fat_below = 25,
+    fat_above = 40,
+    chart_title = "Fiber";
 
   //outer margins
   var margin = {top: 50, right:30, bottom:30, left:60 },
     //chart bars
     height = 300 - margin.top - margin.bottom,
-    width = 200 - margin.right - margin.left;
+    width = 150 - margin.right - margin.left;
 
   var numberFormat = d3.format(".02d");
 
@@ -196,15 +197,14 @@ var fat_above = 40;
   chart.append("line")
     .attr("x1",0)
     .attr("y1",y(fat_avg))
-    .attr("x2",width - 40)
+    .attr("x2",width)
     .attr("y2",y(fat_avg))
     .attr("stroke-width", 2)
     .attr("stroke", "#000000")
-    //.attr('stroke-dasharray', ('6, 3'))
 
   //aveerage intake text
   chart.append("text")
-    .attr("x", width - 57)
+    .attr("x", width - 16)
     .attr("y", y(fat_avg) - 6)
     .attr("class", "average")
     .text(function(d){return fat_avg + "g"});
@@ -214,7 +214,7 @@ var fat_above = 40;
     .attr("x", 0)
     .attr("y", -15)
     .attr("class", "chart-title")
-    .text(function(d){return "Fat"});
+    .text(function(d){return chart_title});
 
 
   function make_y_axis() {        

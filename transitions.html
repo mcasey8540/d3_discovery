@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <style>
 	body {
-	  fill: grey;
+	  fill: #73ab5b;
 	}
 </style>
 <html>	
@@ -15,14 +15,31 @@
 
 	var mySquare=svg.append("rect")
 		.attr("x",60)
-		.attr("y",60)
+		.attr("y",300)
 		.attr("width",60)
-		.attr("height",60)
+		.attr("height",0)
+
+	var mySquare2=svg.append("rect")
+		.attr("x",130)
+		.attr("y",300)
+		.attr("width",60)
+		.attr("height",0)
 
 	mySquare
   .transition()
+  .ease("elastic")
+  .duration(1500)
   .delay(500)
-  .attr("x",320);
+  .attr("y",50)
+  .attr("height",250);
+
+	mySquare2
+  .transition()
+  .ease("elastic")
+  .duration(1500)
+  .delay(500)
+  .attr("y",70)
+  .attr("height",230);
 
 
 

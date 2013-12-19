@@ -8,7 +8,7 @@ body {
 }
 
 .above-recommended{
-  fill: lightgrey;
+  fill: #FFA319;
 }
 
 .recommended{
@@ -16,7 +16,7 @@ body {
 }
 
 .below-recommended{
-  fill: #FFA319;
+  fill: lightgrey;
 }
 
 .today-bar{
@@ -125,13 +125,13 @@ body {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 <html>
-  <body>
-    <svg class="fat-chart" width="150" height="300"></svg>
-    <svg class="fiber-chart" width="150" height="300"></svg>
-    <svg class="carbs-chart" width="150" height="300"></svg>
-    <svg class="sodium-chart" width="150" height="300"></svg>
-    <svg class="protein-chart" width="150" height="300"></svg>
-  </body>
+  <div>
+    <svg class="fat-chart"></svg>
+    <svg class="fiber-chart"></svg>
+    <svg class="carbs-chart"></svg>
+    <svg class="sodium-chart"></svg>
+    <svg class="protein-chart"></svg>
+  </div>
 </html>
 <script>
 
@@ -245,7 +245,7 @@ function generateChart(avg,below,above,chart_title,chart_type,data){
       .tickValues([data[1]["value"], data[2]["value"]])
       .tickFormat(function(d) { return numberFormat(d) + " g";});
 
-    var chart = d3.selectAll("."+chart_type)
+    var chart = d3.select("."+chart_type)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
       //adds margins for axes
@@ -287,14 +287,14 @@ function generateChart(avg,below,above,chart_title,chart_type,data){
 
     //aveerage intake text
     chart.append("text")
-      .attr("x", width - 17)
+      .attr("x", width - (avg.toString().length>2?22:17))
       .attr("y", y(avg) - 6)
       .attr("class", "average")
       .text(function(d){return avg + "g"});
 
     //chart title
     chart.append("text")
-      .attr("x", 0)
+      .attr("x", (width-margin.right-margin.left)/2)
       .attr("y", -15)
       .attr("class", "chart-title")
       .text(function(d){return chart_title});

@@ -14,6 +14,10 @@
   fill: #73ab5b;
 }
 
+.today-bar:hover{
+  fill: #5C8949;
+}
+
 .bar:hover{
   fill: #085456;
 }
@@ -120,7 +124,7 @@ var data = [
 ];
 
   //outer margins
-  var margin = {top: 50, right:30, bottom:30, left:60 },
+  var margin = {top: 50, right:80, bottom:30, left:60 },
     //chart bars
     height = 350 - margin.top - margin.bottom,
     width = 500 - margin.right - margin.left;
@@ -210,7 +214,13 @@ var data = [
     .attr("y2",y(dailyCalorieTarget))
     .attr("stroke-width", 2)
     .attr("stroke", "#808285")
-    .attr('stroke-dasharray', ('6, 3'))
+    .attr('stroke-dasharray', ('6, 3'));
+  chart.append("text")
+    .attr("x", width - 10)
+    .attr("y", y(dailyCalorieTarget) + 2)
+    .attr("class", "axis")
+    .text(function(d){return "Daily Calorie Goal";});  
+
 
   //chart border
   chart.append("rect")

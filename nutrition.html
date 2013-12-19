@@ -130,10 +130,14 @@
 
 //fat data
 var fat_data = [
-  {value:  60},
   {value:  40},
   {value:  25}
 ];
+
+//calculate largest datapoint
+var max_data = d3.max(fat_data, function(d) { return d.value}) + (d3.max(fat_data, function(d) { return d.value}) - d3.min(fat_data, function(d) { return d.value}));
+
+fat_data.unshift({value: max_data});
 
 var fat_avg = 40,
     fat_below = 25,
@@ -159,7 +163,7 @@ var fat_avg = 40,
     .orient("left")
     .tickPadding(10)
     .tickSize(0)
-    .tickValues(fat_data.map(function(d){return d.value}))
+    .tickValues([fat_data[1]["value"], fat_data[2]["value"]])
     .tickFormat(function(d) { return numberFormat(d) + " g";});
 
   var chart = d3.select(".chart")

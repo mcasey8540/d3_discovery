@@ -2,6 +2,10 @@
 <meta charset="utf-8">
 <style>
 
+.chart {
+  fill: grey;
+}
+
 .bar{
   fill: #11a7ad;
 }
@@ -97,18 +101,18 @@
 <script>
 
 var data = [
-  {name: "Monday",    value:  1300},
-  {name: "Tuesday",    value:  1700},
-  {name: "Wednesday",     value: 2000},
-  {name: "Thursday",   value: 1400},
-  {name: "Friday", value: -200},
-  {name: "Saturday",     value: 1560}
+  {name: "Mon 1/23",  value:  1300},
+  {name: "Tues 1/24", value:  1700},
+  {name: "Wed 1/25",  value: 2000},
+  {name: "Thurs 1/26", value: 1400},
+  {name: "Fri 1/27", value: -200},
+  {name: "Today 1/28 ", value: 1560}
 ];
 
   //outer margins
-  var margin = {top: 40, right:30, bottom:30, left:60 },
+  var margin = {top: 50, right:30, bottom:30, left:60 },
     //chart bars
-    height = 300 - margin.top - margin.bottom,
+    height = 350 - margin.top - margin.bottom,
     width = 500 - margin.right - margin.left;
 
   var numberFormat = d3.format(".02d");

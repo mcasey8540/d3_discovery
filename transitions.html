@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	body {
+	  fill: grey;
+	}
+</style>
+<html>	
+	<svg></svg>
+</html>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+	var svg = d3.select("svg");
+
+	var mySquare=svg.append("rect")
+		.attr("x",60)
+		.attr("y",60)
+		.attr("width",60)
+		.attr("height",60)
+
+	mySquare
+  .transition()
+  .delay(500)
+  .attr("x",320);
+
+
+
+</script>

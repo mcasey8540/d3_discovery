@@ -30,6 +30,11 @@
   font: 10px sans-serif;
 }
 
+.average{
+  font: 10px sans-serif;
+  fill: black;
+}
+
 .axis-today{
   font: 10px sans-serif;
   fill: #73ab5b;
@@ -208,14 +213,12 @@ var fat_above = 40;
     //.attr('stroke-dasharray', ('6, 3'))
 
   //chart border
-  // chart.append("rect")
-  //   .attr("x", 0)
-  //   .attr("y", 0)
-  //   .attr("height", height)
-  //   .attr("width", width)   
-  //   .style("stroke", "#323232")
-  //   .style("fill", "none")
-  //   .style("stroke-width", .1);
+  chart.append("text")
+    .attr("x", width - 57)
+    .attr("y", y(fat_avg) - 6)
+    .attr("class", "average")
+    .text(function(d){return fat_avg + "g"});
+
 
   function make_y_axis() {        
     return d3.svg.axis()

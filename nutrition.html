@@ -6,8 +6,16 @@
   fill: grey;
 }
 
-.bar{
+.above-recommended{
+  fill: lightgrey;
+}
+
+.recommended{
   fill: #11a7ad;
+}
+
+.below-recommended{
+  fill: #FFA319;
 }
 
 .today-bar{
@@ -109,36 +117,35 @@
 </html>
 <script>
 
-var data = [
-  {name: "Mon 1/23",  value:  1300},
-  {name: "Tues 1/24", value:  1700},
-  {name: "Wed 1/25",  value: 2000},
-  {name: "Thurs 1/26", value: 1400},
-  {name: "Fri 1/27", value: -200},
-  {name: "Today 1/28", value: 1560},
-  {name: "Sun 1/28", value: 0}
+//fat data
+var fat_data = [
+  {value:  60},
+  {value:  40},
+  {value:  25}
 ];
+
+var fat_avg = 40;
+var fat_below = 25;
+var fat_above = 40;
 
   //outer margins
   var margin = {top: 50, right:30, bottom:30, left:60 },
     //chart bars
-    height = 350 - margin.top - margin.bottom,
-    width = 500 - margin.right - margin.left;
+    height = 300 - margin.top - margin.bottom,
+    width = 200 - margin.right - margin.left;
 
   var numberFormat = d3.format(".02d");
-
-  var dailyCalorieTarget = 1900;
 
   //function - location PLACEMENT matters
   var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .2)
-    .domain(data.map(function(d){return d.name; }));
+    .domain([0,4]);
 
   var y = d3.scale.linear()
     //display
     .range([height, 0])
     //data
-    .domain([d3.min(data, function(d) { return d.value - 500; }), d3.max(data, function(d) { return d.value + 500; })]);
+    .domain([0, d3.max(fat_data, function(d) { return d.value})]);
   
   //adding axes
   var xAxis = d3.svg.axis()
@@ -151,20 +158,8 @@ var data = [
     .orient("left")
     .tickPadding(10)
     .tickSize(0)
-    .tickFormat(function(d) { return numberFormat(d) + " Cals";});
-
-  //adding tooltip
-  var tip = d3.tip()
-    .attr('class', 'd3-tip')
-    .offset([-10, 0])
-    .html(function(d) {
-      return  "<div class='d3-tip-container'>" + d.name + "<hr>"+
-                "<div class='d3-tip-content'>" + 
-                  "<span class='d3-tip-netcal'>" + d.value + " Net Calories</span></br>"+
-                  + d.value + " Food Logged</br>" +
-                  + d.value + " Activity Earned</div>"+
-              "</div>"
-    })  
+    .tickValues(fat_data.map(function(d){return d.value}))
+    .tickFormat(function(d) { return numberFormat(d) + " g";});
 
   var chart = d3.select(".chart")
       .attr("width", width + margin.left + margin.right)
@@ -173,54 +168,64 @@ var data = [
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
-  chart.call(tip);
-
   chart.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0,"+height+")")
-    .call(xAxis);
+    //.call(xAxis);
 
   chart.append("g")
     .attr("class","y axis")
     .call(yAxis)
 
-  chart.append("g")         
-    .attr("class", "grid")
-    .call(make_y_axis()
-      .tickSize(-width, 0, 0)
-      .tickFormat("")
-  ) 
-
   chart.selectAll(".bar")
-      .data(data)
+      .data(fat_data)
     .enter().append("rect")
-      .attr("class", function(d) { var c; d.name === "Today 1/28" ? c="today-bar" : c="bar"; return c; })
-      .attr("x", function(d) {return x(d.name); })
-      .attr("y", function(d) { return y(Math.max(0, d.value));})
-      .attr("height", function(d){ return Math.abs(y(d.value) - y(0)); })
+      .attr("class", function(d) { return determineRange(d.value); })
+      .attr("x",0)
+      .attr("y", function(d) { return y(d.value);})
+      .attr("height", function(d){ return height - y(d.value); })
       .attr("width", x.rangeBand())
-      .on('mouseover', tip.show)
-      .on('mouseout', tip.hide);      
 
+    chart.selectAll(".bar")
+      .data(fat_data)
+    .enter().append("rect")
+      .attr("class", function(d) { return determineRange(d.value); })
+      .attr("x", 80)
+      .attr("y", function(d) { return y(d.value);})
+      .attr("height", function(d){ return height - y(d.value); })
+      .attr("width", x.rangeBand())
+
+
+  function determineRange(value){
+    var c; 
+    if(value === fat_below){
+      c="below-recommended"} 
+    else if(value === fat_above ){
+      c="recommended"}
+    else{
+      c="above-recommended"}
+    return c;
+  }
+    
   //daily calorie trend line
-  chart.append("line")
-    .attr("x1",0)
-    .attr("y1",y(dailyCalorieTarget))
-    .attr("x2",width - 10)
-    .attr("y2",y(dailyCalorieTarget))
-    .attr("stroke-width", 2)
-    .attr("stroke", "#808285")
-    .attr('stroke-dasharray', ('6, 3'))
+  // chart.append("line")
+  //   .attr("x1",0)
+  //   .attr("y1",y(dailyCalorieTarget))
+  //   .attr("x2",width - 10)
+  //   .attr("y2",y(dailyCalorieTarget))
+  //   .attr("stroke-width", 2)
+  //   .attr("stroke", "#808285")
+  //   .attr('stroke-dasharray', ('6, 3'))
 
   //chart border
-  chart.append("rect")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("height", height)
-    .attr("width", width)   
-    .style("stroke", "#323232")
-    .style("fill", "none")
-    .style("stroke-width", .1);
+  // chart.append("rect")
+  //   .attr("x", 0)
+  //   .attr("y", 0)
+  //   .attr("height", height)
+  //   .attr("width", width)   
+  //   .style("stroke", "#323232")
+  //   .style("fill", "none")
+  //   .style("stroke-width", .1);
 
   function make_y_axis() {        
     return d3.svg.axis()

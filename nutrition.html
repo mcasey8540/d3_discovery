@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <style>
 
-.chart {
+body {
   fill: grey;
   float: left;
 }
@@ -126,11 +126,11 @@
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 <html>
   <body>
-    <svg class="fat-chart"></svg>
-    <svg class="fiber-chart"></svg>
-    <svg class="carbs-chart"></svg>
-    <svg class="sodium-chart"></svg>
-    <svg class="protein-chart"></svg>
+    <svg class="fat-chart" width="150" height="300"></svg>
+    <svg class="fiber-chart" width="150" height="300"></svg>
+    <svg class="carbs-chart" width="150" height="300"></svg>
+    <svg class="sodium-chart" width="150" height="300"></svg>
+    <svg class="protein-chart" width="150" height="300"></svg>
   </body>
 </html>
 <script>
@@ -139,8 +139,8 @@
 var fat_avg = 25,
     fat_below = 35,
     fat_above = 65,
-    chart_title = "Protein"
-    chart_type = "fat-chart";
+    chart_title = "Fat"
+    chart_type = "protein-chart";
 
 var fat_data = [
   {value:  fat_above},

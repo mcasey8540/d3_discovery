@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  fill: grey;
+  float: left;
+}
+
+.above-recommended{
+  fill: #FFA319;
+}
+
+.recommended{
+  fill: #11a7ad;
+}
+
+.below-recommended{
+  fill: lightgrey;
+}
+
+.today-bar{
+  fill: #73ab5b;
+}
+
+.bar:hover{
+  fill: #085456;
+}
+
+.axis{
+  font: 10px sans-serif;
+}
+
+.chart-title{
+  font: 15px sans-serif;
+  fill: black;
+  font-weight:bold;
+}
+
+.average{
+  font: 10px sans-serif;
+  fill: black;
+}
+
+.axis-today{
+  font: 10px sans-serif;
+  fill: #73ab5b;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/*removes the x axis grid line*/
+.x.axis path{
+  display:none;
+}
+
+.y.axis path{
+  display:none;
+}
+
+.grid .tick {
+  stroke: lightgrey;
+  opacity: 0.7;
+}
+.grid path {
+  stroke-width: 0;
+}
+
+/*tooltips*/
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: white;
+  color: #fff;
+  height: 50px;
+  width: 100px;
+  border-style: solid;
+  border-width:/5px;
+  border-radius:5px;
+  box-shadow: 0px 0px 9px #888888;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 15px;
+  width: 100%;
+  line-height: 1;
+  color: #fff;
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+/* popover content */
+.d3-tip-container{
+  font: 10px sans-serif;
+  color: grey;
+  text-align: center;
+}
+
+.d3-tip-content{
+  text-align: left;
+  margin-left: 5px;
+}
+
+.d3-tip-netcal{
+  color: #11a7ad;
+}
+
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
+<html>
+  <svg class="container"><svg>
+<!--   <div>
+    <svg class="fat-chart"></svg>
+    <svg class="fiber-chart"></svg>
+    <svg class="carbs-chart"></svg>
+    <svg class="sodium-chart"></svg>
+    <svg class="protein-chart"></svg>
+  </div> -->
+</html>
+<script>
+
+function getChartData(){
+
+  function getFatData(){
+    var avg = 25,
+      below = 35,
+      above = 65,
+      chart_title = "Fat"
+      chart_type = "fat-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  }
+
+  function getFiberData(){
+    var avg = 15,
+      below = 10,
+      above = 20,
+      chart_title = "Fiber"
+      chart_type = "fiber-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  } 
+
+  function getCarbsData(){
+    var avg = 155,
+      below = 80,
+      above = 125,
+      chart_title = "Carbs"
+      chart_type = "carbs-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  } 
+
+  function getSodiumData(){
+    var avg = 820,
+      below = 800,
+      above = 900,
+      chart_title = "Sodium"
+      chart_type = "sodium-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  }  
+
+  function getProteinData(){
+    var avg = 25,
+      below = 35,
+      above = 65,
+      chart_title = "Protein"
+      chart_type = "protein-chart";
+
+    var data = [
+      {value:  above},
+      {value:  below}
+    ];
+    generateChart(avg,below,above,chart_title,chart_type,data);
+  }       
+
+  getFatData();
+  //getFiberData();
+  //getCarbsData();
+  //getSodiumData();
+  //getProteinData();
+
+}
+
+function generateChart(avg,below,above,chart_title,chart_type,data){ 
+  //calculate largest datapoint
+  var max_data = d3.max(data, function(d) { return d.value}) + 
+      ((d3.max(data, function(d) { return d.value}) - d3.min(data, function(d) { return d.value}) + d3.min(data, function(d) { return d.value}))/2);
+
+  //add largest datapoint
+  data.unshift({value: max_data});
+
+    //outer margins
+    var margin = {top: 50, right:15, bottom:30, left:60 },
+      //chart bars
+      height = 300 - margin.top - margin.bottom,
+      width = 150 - margin.right - margin.left;
+
+    var numberFormat = d3.format(".02d");
+
+    var y = d3.scale.linear()
+      //display
+      .range([height, 0])
+      //data
+      .domain([0, d3.max(data, function(d) { return d.value})]);
+    
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .tickPadding(10)
+      .tickSize(0)
+      .tickValues([data[1]["value"], data[2]["value"]])
+      .tickFormat(function(d) { return numberFormat(d) + " g";});
+
+    var container = d3.select("")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+
+    var chart = d3.select("."+chart_type)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      //adds margins for axes
+      .append("g")
+        .attr("transform", "translate(40," + margin.top + ")")
+
+    var yaxisTicks = chart.append("g")
+      .attr("class","y axis")
+      
+    yaxisTicks.transition()
+      .duration(750)
+      .delay(250)
+      .call(yAxis)
+
+    var bars = chart.selectAll(".bar")
+        .data(data)
+      .enter().append("rect")
+        .attr("class", function(d) { return determineRange(d.value); })
+        .attr("x",0)
+        .attr("y", function(d) { return y(0);})
+        .attr("height", function(d){ return height - y(0); })
+        .attr("width", 35)
+
+    bars.transition()
+      .ease("elastic")
+      .duration(1500)
+      .delay(250)
+      .attr("class", function(d) { return determineRange(d.value); })
+      .attr("x",0)
+      .attr("y", function(d) { return y(d.value);})
+      .attr("height", function(d){ return height - y(d.value); })
+      .attr("width", 35)
+
+    function determineRange(value){
+      var c; 
+      if(value === below){
+        c="below-recommended"} 
+      else if(value === above ){
+        c="recommended"}
+      else{
+        c="above-recommended"}
+      return c;
+    }
+      
+    //average intake line
+    var averageline = chart.append("line")
+      .attr("x1",0)
+      .attr("y1",y(0))
+      .attr("x2",width)
+      .attr("y2",y(0))
+      .attr("stroke-width", 2)
+      .attr("stroke", "#ffffff")
+
+    averageline.transition()
+      .ease("elastic")
+      .duration(1500)
+      .delay(250)
+      .attr("x1",0)
+      .attr("y1",y(avg))
+      .attr("x2",width)
+      .attr("y2",y(avg))
+      .attr("stroke-width", 2)
+      .attr("stroke", "#000000")           
+
+    //aveerage intake text
+    var averageText = chart.append("text")
+      .style("fill-opacity", "0.1");
+
+    averageText.transition()
+      .duration(750)
+      .delay(500)
+      .attr("class", "average")
+      .style("fill-opacity", "1.0")
+      .attr("x", width - (avg.toString().length>2?22:17))
+      .attr("y", y(avg) - 6)
+      .text(function(d){return avg + "g"});      
+
+    //chart title
+    chart.append("text")
+      .attr("x", (width-margin.right-margin.left)/2)
+      .attr("y", -15)
+      .attr("class", "chart-title")
+      .text(function(d){return chart_title});
+
+    function make_y_axis() {        
+      return d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(5)
+    }
+  }
+
+  getChartData();
+
+</script>
+
+
+

@@ -62,7 +62,7 @@
   padding: 12px;
   background: white;
   color: #fff;
-  height: 50px;
+  height: 55px;
   width: 105px;
   border-style: solid;
   border-width:/5px;
@@ -98,11 +98,11 @@
 
 .d3-tip-content{
   text-align: left;
-  margin-left: 5px;
 }
 
 .d3-tip-netcal{
   color: #11a7ad;
+  text-align: left;
 }
 
 </style>
@@ -114,13 +114,13 @@
 <script>
 
 var data = [
-  {name: "Mon 1/23",  value:  1300},
-  {name: "Tues 1/24", value:  1700},
-  {name: "Wed 1/25",  value: 2000},
-  {name: "Thurs 1/26", value: 1400},
-  {name: "Fri 1/27", value: -200},
-  {name: "Today 1/28", value: 1560},
-  {name: "Sun 1/28", value: 0}
+  {day: "Monday", name: "Mon 1/23",  net:  1300, logged:1500, activity:200 },
+  {day: "Tuesday",  name: "Tues 1/24", net:  1568, logged:1800, activity:232 },
+  {day: "Wednesday",  name: "Weds 1/25", net:  2000, logged:2100, activity:100},
+  {day: "Thursday",name: "Thur 1/26", net: 950, logged:1600, activity:650},
+  {day: "Friday", name: "Fri 1/27", net: -200, logged:0, activity:200},
+  {day: "Today", name: "Today 1/28", net: 1100, logged:1200, activity:100},
+  {day: "Sunday", name: "Sun 1/29", net: 0, logged:0, activity:0}
 ];
 
   //outer margins
@@ -142,7 +142,7 @@ var data = [
     //display
     .range([height, 0])
     //data
-    .domain([d3.min(data, function(d) { return d.value - 500; }), d3.max(data, function(d) { return d.value + 500; })]);
+    .domain([d3.min(data, function(d) { return d.net - 500; }), d3.max(data, function(d) { return d.net + 500; })]);
   
   //adding axes
   var xAxis = d3.svg.axis()
@@ -162,11 +162,11 @@ var data = [
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return  "<div class='d3-tip-container'>" + d.name + "<hr>"+
-                "<div class='d3-tip-content'>" + 
-                  "<span class='d3-tip-netcal'>" + d.value + " Net Calories</span></br>"+
-                  + d.value + " Food Logged</br>" +
-                  + d.value + " Activity Earned</div>"+
+      return  "<div class='d3-tip-container'>" + d.day + "<hr>"+
+                "<div class='d3-tip-content'>"
+                  + d.logged + " Food Logged</br>" + 
+                  "-"+ d.activity + " Activity</div>"+
+                  "<div class='d3-tip-netcal'>" + d.net + " Net Calories</div>"
               "</div>"
     })  
 
@@ -210,8 +210,8 @@ var data = [
     .ease("elastic")
     .duration(1500)
     .attr("x", function(d) {return x(d.name); })
-    .attr("y", function(d) { return y(Math.max(0, d.value));})
-    .attr("height", function(d){ return Math.abs(y(d.value) - y(0)); })
+    .attr("y", function(d) { return y(Math.max(0, d.net));})
+    .attr("height", function(d){ return Math.abs(y(d.net) - y(0)); })
     .attr("width", x.rangeBand())
     .each("end", function() {  
       d3.select(this).transition()
